@@ -1,13 +1,16 @@
 return {
   {
-    "folke/tokyonight.nvim",
+    "EdenEast/nightfox.nvim",
     lazy = false,
     priority = 1000,
-    opts = { style = "night" },
-    config = function(_, opts)
-      require("tokyonight").setup(opts)
-      vim.cmd.colorscheme("tokyonight")
+    config = function()
+      vim.cmd.colorscheme("dayfox")
     end,
+  },
+  {
+    "echasnovski/mini.icons",
+    version = false,
+    lazy = true,
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -17,6 +20,17 @@ return {
         theme = "auto",
         icons_enabled = false,
         globalstatus = true,
+        component_separators = { left = "|", right = "|" },
+        section_separators = { left = "", right = "" },
+        disabled_filetypes = { "neo-tree", "TelescopePrompt" },
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch" },
+        lualine_c = { { "filename", path = 1 } },
+        lualine_x = { "encoding", "fileformat", "filetype" },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
       },
     },
   },
