@@ -21,5 +21,12 @@ map("i", "<A-k>", "<Esc>:m .-2<CR>==gi", { silent = true, desc = "Move line up" 
 map("v", "<A-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
 map("v", "<A-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
 
+-- Toggle format on save
+map("n", "<leader>uf", function()
+  vim.g.disable_autoformat = not vim.g.disable_autoformat
+  local state = vim.g.disable_autoformat and "OFF" or "ON"
+  vim.notify("Format on save: " .. state)
+end, { desc = "Toggle format on save" })
+
 
 

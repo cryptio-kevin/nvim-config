@@ -47,9 +47,10 @@ Minimal, modular, and readable Neovim setup using `lazy.nvim`, tuned for React/T
 - Toggle autoformat per-session: `:let g:disable_autoformat = 1` (set to `0` to re-enable)
 - ESLint diagnostics/actions via `none-ls` (`eslint_d`)
 
-## Completion, snippets, autopairs
+## Completion, signatures, snippets, autopairs
 
 - `nvim-cmp` completion with `<CR>` to accept, `<Tab>`/`<S-Tab>` navigate
+- Signature help via `cmp-nvim-lsp-signature-help`
 - `LuaSnip` + `friendly-snippets` for React/TS snippets
 - `nvim-autopairs` auto-inserts pairs
 
@@ -127,6 +128,7 @@ return {
 - [`williamboman/mason.nvim`](https://github.com/williamboman/mason.nvim): install/manage LSPs and tools.
 - [`WhoIsSethDaniel/mason-tool-installer.nvim`](https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim): ensure dev tools are installed.
 - [`hrsh7th/nvim-cmp`](https://github.com/hrsh7th/nvim-cmp): completion engine.
+- [`hrsh7th/cmp-nvim-lsp-signature-help`](https://github.com/hrsh7th/cmp-nvim-lsp-signature-help): inline parameter hints in the completion menu.
 - [`L3MON4D3/LuaSnip`](https://github.com/L3MON4D3/LuaSnip): snippets engine.
 - [`rafamadriz/friendly-snippets`](https://github.com/rafamadriz/friendly-snippets): community snippet collection.
 - [`saadparwaiz1/cmp_luasnip`](https://github.com/saadparwaiz1/cmp_luasnip): LuaSnip source for nvim-cmp.
@@ -136,6 +138,17 @@ return {
 - [`windwp/nvim-autopairs`](https://github.com/windwp/nvim-autopairs): auto insert matching pairs.
 - [`echasnovski/mini.icons`](https://github.com/echasnovski/mini.icons): fallback icons for plugins.
 - [`j-hui/fidget.nvim`](https://github.com/j-hui/fidget.nvim): minimal LSP status UI.
+ - [`rcarriga/nvim-notify`](https://github.com/rcarriga/nvim-notify): modern notifications.
+ - [`stevearc/dressing.nvim`](https://github.com/stevearc/dressing.nvim): improved `vim.ui.select`/`vim.ui.input`.
+ - [`lukas-reineke/indent-blankline.nvim`](https://github.com/lukas-reineke/indent-blankline.nvim): indent guides via ibl.
+ - [`folke/trouble.nvim`](https://github.com/folke/trouble.nvim): diagnostics/references list UI.
+ - [`sindrets/diffview.nvim`](https://github.com/sindrets/diffview.nvim): Git diffs and history.
+ - [`kdheepak/lazygit.nvim`](https://github.com/kdheepak/lazygit.nvim): LazyGit integration.
+ - [`windwp/nvim-ts-autotag`](https://github.com/windwp/nvim-ts-autotag): auto close/rename HTML/JSX tags.
+ - [`nvim-treesitter/nvim-treesitter-textobjects`](https://github.com/nvim-treesitter/nvim-treesitter-textobjects): Treesitter textobjects.
+ - [`nvim-treesitter/nvim-treesitter-context`](https://github.com/nvim-treesitter/nvim-treesitter-context): pin current scope.
+ - [`folke/neodev.nvim`](https://github.com/folke/neodev.nvim): Lua LSP enhancements for Neovim.
+ - [`b0o/schemastore.nvim`](https://github.com/b0o/schemastore.nvim): JSON/YAML schema catalogs.
 - [`nvim-lua/plenary.nvim`](https://github.com/nvim-lua/plenary.nvim): utility library used by many plugins.
 - [`nvim-tree/nvim-web-devicons`](https://github.com/nvim-tree/nvim-web-devicons): filetype icons.
 - [`MunifTanjim/nui.nvim`](https://github.com/MunifTanjim/nui.nvim): UI components for Neovim plugins.

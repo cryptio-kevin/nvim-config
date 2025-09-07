@@ -6,9 +6,14 @@ return {
       "williamboman/mason-lspconfig.nvim",
       "j-hui/fidget.nvim",
       "hrsh7th/cmp-nvim-lsp",
+      "folke/neodev.nvim",
+      "SmiteshP/nvim-navic",
+      "b0o/schemastore.nvim",
     },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
+      local ok_neodev, neodev = pcall(require, "neodev")
+      if ok_neodev then neodev.setup({}) end
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -31,7 +36,7 @@ return {
       })
 
       -- Global LSP keymaps (VSCode-like)
-      local function on_attach(_, bufnr)
+      local function on_attach(client, bufnr)
         local map = function(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
@@ -62,6 +67,11 @@ return {
             vim.b.inlay_hints_enabled = not enabled
           end, "Toggle inlay hints")
         end
+        -- Navic breadcrumbs attach when supported
+        local ok_navic, navic = pcall(require, "nvim-navic")
+        if ok_navic and client.server_capabilities.documentSymbolProvider then
+          navic.attach(client, bufnr)
+        end
       end
 
       lspconfig.lua_ls.setup({
@@ -74,6 +84,31 @@ return {
           },
         },
       })
+
+      -- JSON/YAML with SchemaStore
+      local ok_schemastore, schemastore = pcall(require, "schemastore")
+      if ok_schemastore then
+        lspconfig.jsonls.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          settings = {
+            json = {
+              schemas = schemastore.json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        })
+        lspconfig.yamlls.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          settings = {
+            yaml = {
+              schemaStore = { enable = false, url = "" },
+              schemas = schemastore.yaml.schemas(),
+            },
+          },
+        })
+      end
     end,
   },
 
@@ -89,7 +124,7 @@ return {
         tsserver_max_memory = 4096,
         jsx_close_tag = { enable = true },
       },
-      on_attach = function(_, bufnr)
+      on_attach = function(client, bufnr)
         local map = function(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
@@ -118,6 +153,11 @@ return {
             vim.b.inlay_hints_enabled = not enabled
           end, "Toggle inlay hints")
         end
+        -- Navic breadcrumbs for TS
+        local ok_navic, navic = pcall(require, "nvim-navic")
+        if ok_navic and client and client.server_capabilities.documentSymbolProvider then
+          navic.attach(client, bufnr)
+        end
       end,
     },
   },
@@ -138,6 +178,16 @@ return {
         },
       })
     end,
+  },
+  {
+    "folke/trouble.nvim",
+    cmd = { "Trouble" },
+    keys = {
+      { "<leader>xx", function() require("trouble").toggle("document_diagnostics") end, desc = "Diagnostics (buffer)" },
+      { "<leader>xX", function() require("trouble").toggle("workspace_diagnostics") end, desc = "Diagnostics (workspace)" },
+      { "<leader>xr", function() require("trouble").toggle("lsp_references") end, desc = "LSP References (list)" },
+    },
+    opts = {},
   },
 }
 

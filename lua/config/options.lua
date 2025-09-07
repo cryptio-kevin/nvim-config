@@ -25,5 +25,6 @@ vim.o.scrolloff = 4
 vim.o.sidescrolloff = 4
 vim.o.mouse = "a"
 vim.o.clipboard = "unnamedplus"
+vim.o.completeopt = "menu,menuone,noselect"
 
 

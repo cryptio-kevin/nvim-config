@@ -8,6 +8,20 @@ return {
     end,
   },
   {
+    "rcarriga/nvim-notify",
+    event = "VeryLazy",
+    config = function()
+      local notify = require("notify")
+      notify.setup({ stages = "fade_in_slide_out", timeout = 3000 })
+      vim.notify = notify
+    end,
+  },
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
     "echasnovski/mini.icons",
     version = false,
     lazy = true,
@@ -33,6 +47,12 @@ return {
         lualine_z = { "location" },
       },
     },
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = { indent = { char = "│" }, scope = { enabled = true } },
   },
 }
 
