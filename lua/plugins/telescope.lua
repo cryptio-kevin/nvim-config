@@ -7,6 +7,11 @@ return {
     keys = {
       { "<leader>ff", function() require("telescope.builtin").find_files() end, desc = "Find files" },
       { "<leader>fg", function() require("telescope.builtin").live_grep() end, desc = "Live grep" },
+      { "<leader>sd", function()
+        local tb = require("telescope.builtin")
+        local has_diag = not vim.tbl_isempty(vim.diagnostic.get(nil))
+        if has_diag then tb.diagnostics({}) else tb.diagnostics({ bufnr = 0 }) end
+      end, desc = "Diagnostics (workspace/buffer)" },
       { "<C-p>", function() require("telescope.builtin").find_files() end, desc = "Find files (VSCode)" },
     },
     opts = function()

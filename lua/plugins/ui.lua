@@ -28,7 +28,7 @@ return {
         lualine_a = { "mode" },
         lualine_b = { "branch" },
         lualine_c = { { "filename", path = 1 } },
-        lualine_x = { "encoding", "fileformat", "filetype" },
+        lualine_x = { { "diagnostics", sources = { "nvim_diagnostic" }, sections = { "error", "warn", "info", "hint" }, colored = true, update_in_insert = false }, "encoding", "fileformat", "filetype" },
         lualine_y = { "progress" },
         lualine_z = { "location" },
       },

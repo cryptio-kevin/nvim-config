@@ -12,6 +12,19 @@ return {
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      -- Global diagnostics and LSP UI
+      vim.diagnostic.config({
+        severity_sort = true,
+        update_in_insert = false,
+        underline = true,
+        signs = true,
+        virtual_text = false,
+        float = { border = "rounded", source = "if_many", focusable = false, header = "", prefix = "" },
+      })
+      local border = "rounded"
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
+      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border })
+
       require("fidget").setup({})
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls" },
@@ -32,6 +45,23 @@ return {
         map("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, "Format buffer")
         map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
         map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+        -- Diagnostics UX: float and error-only navigation
+        map("n", "gl", function() vim.diagnostic.open_float(nil, { focusable = false, border = "rounded", scope = "line", source = "if_many" }) end, "Line diagnostics")
+        map("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end, "Prev error")
+        map("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end, "Next error")
+        -- Inlay hints default on + toggle
+        local ih = vim.lsp.inlay_hint
+        if ih then
+          pcall(function()
+            if ih.enable then ih.enable(true, { bufnr = bufnr }) else ih(bufnr, true) end
+            vim.b.inlay_hints_enabled = true
+          end)
+          map("n", "<leader>ui", function()
+            local enabled = (ih.is_enabled and ih.is_enabled({ bufnr = bufnr })) or vim.b.inlay_hints_enabled
+            if ih.enable then ih.enable(not enabled, { bufnr = bufnr }) else pcall(ih, bufnr, not enabled) end
+            vim.b.inlay_hints_enabled = not enabled
+          end, "Toggle inlay hints")
+        end
       end
 
       lspconfig.lua_ls.setup({
@@ -73,6 +103,21 @@ return {
         map("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, "Format buffer")
         map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
         map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+        map("n", "gl", function() vim.diagnostic.open_float(nil, { focusable = false, border = "rounded", scope = "line", source = "if_many" }) end, "Line diagnostics")
+        map("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end, "Prev error")
+        map("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end, "Next error")
+        local ih = vim.lsp.inlay_hint
+        if ih then
+          pcall(function()
+            if ih.enable then ih.enable(true, { bufnr = bufnr }) else ih(bufnr, true) end
+            vim.b.inlay_hints_enabled = true
+          end)
+          map("n", "<leader>ui", function()
+            local enabled = (ih.is_enabled and ih.is_enabled({ bufnr = bufnr })) or vim.b.inlay_hints_enabled
+            if ih.enable then ih.enable(not enabled, { bufnr = bufnr }) else pcall(ih, bufnr, not enabled) end
+            vim.b.inlay_hints_enabled = not enabled
+          end, "Toggle inlay hints")
+        end
       end,
     },
   },
